@@ -24,7 +24,17 @@ namespace PocWebsocketsSupport
         public void Configure(IApplicationBuilder app)
         {
             app.UseWindowsAuthentication();
-            app.UseCondenser();
+            app.Use(async (context, middleware) =>
+            {
+                var user = await context.Authentication.AuthenticateAsync("NTLM");
+                if(user == null)
+                {
+                    await context.Authentication.ChallengeAsync();
+                }
+                await middleware.Invoke();
+                return;
+            });
+            //app.UseCondenser();
         }
     }
 }

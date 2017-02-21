@@ -15,6 +15,11 @@ internal partial class Interop
             {
                 LowPart = HighPart = IntPtr.Zero;
             }
+
+            public bool IsValid()
+            {
+                return LowPart == HighPart && HighPart == IntPtr.Zero;
+            }
         }
     }
 }
